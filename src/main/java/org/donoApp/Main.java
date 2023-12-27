@@ -15,8 +15,7 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) {
 
-        AccessPoints.awsProperty(); // called aws access
-        AmazonPollyClient pollyClient = new AmazonPollyClient();
+
 
         String readText = "<speak>"
                 + "Dono Ünal Seni Çook Sevıyor ve Çok Özledı"
@@ -25,27 +24,12 @@ public class Main {
                 + "<prosody volume='loud'> Ama Dünya Dursa Bıle Senden Asla Vazgeçmeyecek </prosody>"
                 + "</speak>";
 
-        SynthesizeSpeechRequest speechRequest = new SynthesizeSpeechRequest()
-                .withTextType("ssml")
-                .withText(readText)
-                .withVoiceId("Filiz")
-                .withOutputFormat("mp3");
 
-        SynthesizeSpeechResult speechRes = pollyClient.synthesizeSpeech(speechRequest);
 
-        DateTime time = new DateTime(DateTime.now());
-        String times = time.toString().replace("-", "_").replace(":", "_");
 
-        try {
-            byte[] audioData = speechRes.getAudioStream().readAllBytes();
-            File audioFile = new File("C://Users/uzera/OneDrive/Desktop/" + times + ".mp3");
-            if (audioFile.exists()) audioFile.mkdirs();
 
-            FileOutputStream fileOS = new FileOutputStream(audioFile);
-            fileOS.write(audioData);
-            fileOS.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
+
+
     }
 }
