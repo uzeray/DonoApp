@@ -14,9 +14,11 @@ public class ReadingRules {
 
     private AmazonPollyClient pollyClient;
 
-    public ReadingRules() {
+    public ReadingRules(String textType, String text, String voiceId, String outputFormat) {
         AccessPoints.awsProperty(); // called aws access
         this.pollyClient = new AmazonPollyClient();
+        SynthesizeSpeechRequest request = speechRequest(textType, text, voiceId, outputFormat);
+        speechResult(request, pollyClient);
     }
 
     private SynthesizeSpeechRequest speechRequest(String textType, String text, String voiceId, String outputFormat) {
@@ -27,9 +29,13 @@ public class ReadingRules {
                 .withOutputFormat(outputFormat);
     }
 
-    private byte[] speechResult (SynthesizeSpeechRequest speechRequest, AmazonPollyClient pollyClient) throws IOException {
-        SynthesizeSpeechResult speechResult = pollyClient.synthesizeSpeech(speechRequest);
-        return speechResult.getAudioStream().readAllBytes();
+    private void speechResult(SynthesizeSpeechRequest speechRequest, AmazonPollyClient pollyClient) {
+        try {
+            SynthesizeSpeechResult speechResult = pollyClient.synthesizeSpeech(speechRequest);
+            byte[] audioData = speechResult.getAudioStream().readAllBytes();
+            SaveAudioFile save = new SaveAudioFile(audioData);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
-
 }
