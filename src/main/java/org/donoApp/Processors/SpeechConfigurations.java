@@ -7,23 +7,19 @@ import org.donoApp.Assets.AccessPoints;
 
 import java.io.IOException;
 
-public class ReadingRules {
-
-    private int waitForDot = 1000; // waiting after Dot 1 sec
-    private int waitForComma = 500; // waiting after comma 0.5 sec
+public class SpeechConfigurations {
 
     private AmazonPollyClient pollyClient;
 
-    public ReadingRules(String textType, String text, String voiceId, String outputFormat) {
+    public SpeechConfigurations(String text, String voiceId, String outputFormat) {
         AccessPoints.awsProperty(); // called aws access
         this.pollyClient = new AmazonPollyClient();
-        SynthesizeSpeechRequest request = speechRequest(textType, text, voiceId, outputFormat);
+        SynthesizeSpeechRequest request = speechRequest(text, voiceId, outputFormat);
         speechResult(request, pollyClient);
     }
 
-    private SynthesizeSpeechRequest speechRequest(String textType, String text, String voiceId, String outputFormat) {
+    private SynthesizeSpeechRequest speechRequest(String text, String voiceId, String outputFormat) {
         return new SynthesizeSpeechRequest()
-                .withTextType(textType)
                 .withText(text)
                 .withVoiceId(voiceId)
                 .withOutputFormat(outputFormat);
